@@ -9,15 +9,13 @@ public class EventListeners extends ListenerAdapter {
 
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
-        Message msg = event.getMessage();
-        String msgContent = msg.getContentRaw();
-        Member member = event.getMember();
-        System.out.println(msg);
+        String msgContent = event.getMessage().getContentRaw();
         if(event.isFromGuild() && msgContent.startsWith("!role")){
             Guild guild = event.getGuild();
             MessageChannel channel = event.getChannel();
+            Member member = event.getMember();
             String roleName = msgContent.substring(msgContent.indexOf(' ')+1);
-            if(roleName.isEmpty()){
+            if(roleName.isEmpty() || roleName.equals("!role")){
                 channel.sendMessage("Syntax: !role <Rollenname>").queue();
                 return;
             }
@@ -29,13 +27,13 @@ public class EventListeners extends ListenerAdapter {
             try {
                 if(member.getRoles().contains(roles.get(0))){
                     guild.removeRoleFromMember(member, roles.get(0)).queue();
-                    channel.sendMessage("Role removed successfully").queue();
+                    channel.sendMessage("Rolle erfolgreich entfernt!").queue();
                 } else {
                     guild.addRoleToMember(member, roles.get(0)).queue();
-                    channel.sendMessage("Role added successfully").queue();
+                    channel.sendMessage("Rolle erfolgreich hinzugefügt!").queue();
                 }
             } catch (HierarchyException e) {
-                channel.sendMessage("Du darfst dir diese Rolle nicht zuweisen!").queue();
+                channel.sendMessage("Du darfst diese Rolle nicht ändern!").queue();
             }
         }
     }
