@@ -1,5 +1,6 @@
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.exceptions.HierarchyException;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
@@ -10,7 +11,8 @@ public class EventListeners extends ListenerAdapter {
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
         String msgContent = event.getMessage().getContentRaw();
-        if(event.isFromGuild() && msgContent.startsWith("!role")){
+        if(event.isFromGuild() && event.getChannel().getName().equals("bot-commands") && !event.getAuthor().isBot()
+                && msgContent.startsWith("!role")){
             Guild guild = event.getGuild();
             MessageChannel channel = event.getChannel();
             Member member = event.getMember();
@@ -37,4 +39,5 @@ public class EventListeners extends ListenerAdapter {
             }
         }
     }
+
 }
