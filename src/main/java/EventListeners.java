@@ -24,7 +24,7 @@ public class EventListeners extends ListenerAdapter {
             }
             List<Role> roles = guild.getRolesByName( roleName, true);
             if(roles.isEmpty()){
-                channel.sendMessage( mention +  " Rolle nicht gefunden!").queue();
+                channel.sendMessage( mention +  " Rolle \""+ roleName + "\" nicht gefunden!").queue();
                 return;
             }
             try {
