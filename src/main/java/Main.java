@@ -18,5 +18,6 @@ public class Main {
         commands = new HashMap<>();
         commands.put("!role", new GetRoleCommand());
         commands.put("!help", new HelpCommand());
+        commands.put( new AddVoiceChannelCommand().getCommand(), new AddVoiceChannelCommand());
     }
 }

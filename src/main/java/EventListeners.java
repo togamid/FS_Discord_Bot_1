@@ -1,6 +1,9 @@
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.VoiceChannel;
+import net.dv8tion.jda.api.events.DisconnectEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-
+import org.jetbrains.annotations.NotNull;
 
 
 public class EventListeners extends ListenerAdapter {
@@ -14,6 +17,16 @@ public class EventListeners extends ListenerAdapter {
 
         } else {
             mention = event.getAuthor().getAsMention();
+        }
+
+        //TODO This is only temporary and should be changed
+        if(event.isFromGuild() && !event.getAuthor().isBot()){
+           VoiceChannel[] channels = event.getGuild().getVoiceChannels().toArray(new VoiceChannel[0]);
+            for (VoiceChannel channel : channels ){
+                if(channel.getName().startsWith("[TEMP]") && channel.getMembers().size() == 0){
+                   event.getGuild().getGuildChannelById(channel.getId()).delete().queue();
+                }
+            }
         }
 
         if(!event.getAuthor().isBot() && event.getChannel().getName().equals("bot-commands")){
@@ -36,5 +49,6 @@ public class EventListeners extends ListenerAdapter {
             }
          }
     }
+
 
 }
