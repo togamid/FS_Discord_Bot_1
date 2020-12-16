@@ -17,5 +17,6 @@ public class Main {
 
         commands = new HashMap<>();
         commands.put("!role", new GetRoleCommand());
+        commands.put("!help", new HelpCommand());
     }
 }

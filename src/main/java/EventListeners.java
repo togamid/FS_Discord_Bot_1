@@ -28,9 +28,9 @@ public class EventListeners extends ListenerAdapter {
                 command = msgContent;
                 args="";
             }
-            System.out.println(command);
+
             ICommand commandObj = Main.commands.get(command);
-            System.out.println(commandObj);
+
             if(commandObj != null){
                 event.getChannel().sendMessage(mention +" "+  commandObj.run(args, event)).queue();
             }
