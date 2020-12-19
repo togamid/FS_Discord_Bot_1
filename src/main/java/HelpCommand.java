@@ -18,8 +18,9 @@ public class HelpCommand implements ICommand{
             ICommand[] commands=  commandCollection.toArray(new ICommand[0]);
             for (int i = 0; i< commands.length; i++){
                 ICommand currCommand = commands[i];
+                builder.append("**");
                 builder.append(currCommand.getCommand());
-                builder.append(": ");
+                builder.append("**: ");
                 builder.append(currCommand.getShortDesc());
                 builder.append("\n");
             }

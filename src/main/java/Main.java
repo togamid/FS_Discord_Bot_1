@@ -10,13 +10,17 @@ public class Main {
     public static HashMap<String, ICommand> commands;
 
     public static void main( String[] args) throws LoginException, InterruptedException {
-        jda = JDABuilder.createDefault("Token")
+        Config config = new Config();
+        config.loadConfig("config.txt");
+        jda = JDABuilder.createDefault(config.config.get("Token"))
                 .addEventListeners(new EventListeners())
                 .build();
         jda.awaitReady();
 
         commands = new HashMap<>();
-        commands.put("!role", new GetRoleCommand());
+        GetRoleCommand roleCommand = new GetRoleCommand();
+        roleCommand.init(config);
+        commands.put(roleCommand.getCommand(), roleCommand);
         commands.put("!help", new HelpCommand());
         commands.put( new AddVoiceChannelCommand().getCommand(), new AddVoiceChannelCommand());
     }

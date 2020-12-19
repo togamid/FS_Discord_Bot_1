@@ -6,7 +6,7 @@ public class AddVoiceChannelCommand implements ICommand{
 
 
     String shortDesc = "Fügt einen neuen temporären Voicechannel hinzu.";
-    String longDesc = shortDesc + "Nutzen mit !tmpvoice <Kanalname>. Der Kanal wird nach einiger Zeit wieder gelöscht.";
+    String longDesc = shortDesc + " Nutzen mit !tmpvoice <Kanalname>. Der Kanal wird nach einiger Zeit wieder gelöscht.";
     String command = "!tmpvoice";
     String categoryName = "voice-channel";
 
@@ -22,7 +22,7 @@ public class AddVoiceChannelCommand implements ICommand{
         Guild guild = event.getGuild();
         Category category = guild.getCategoriesByName(categoryName, true).get(0);
         guild.createVoiceChannel("[TEMP] " + args, category).queue();
-        return "Kanal " + args + " erstellt! Bitte gehe schnell in den Kanl, bevor er geslöscht wird";
+        return "Kanal \"" + args + "\" erstellt! Bitte gehe schnell in den Kanal, bevor er gelöscht wird";
     }
 
     @Override
