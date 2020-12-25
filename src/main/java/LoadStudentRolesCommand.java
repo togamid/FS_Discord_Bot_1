@@ -93,6 +93,10 @@ public class LoadStudentRolesCommand implements ICommand {
             case "ST@B-WIN":
                 addRole(member, guild, "WIN");
                 break;
+            case "ST@M-IN":
+                addRole(member, guild, "Master");
+                break;
+
         }
         int terms = getNumberOfTerms(results.get("orclactivestartdate"));
         if(terms < 8){
