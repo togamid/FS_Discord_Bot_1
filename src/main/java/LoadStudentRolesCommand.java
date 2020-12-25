@@ -7,12 +7,16 @@ import javax.naming.Context;
 import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
 import javax.naming.directory.*;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.*;
 
 public class LoadStudentRolesCommand implements ICommand {
-    private static final String command = "!loadStudentRole";
+    //Config parameters
+    private static final String command = "!loadStudentRoles";
     private final String shortDesc = "Lädt die Studentenrollen für den Nutzer. ";
-    private final String longDesc = shortDesc + "Nutzung: !loadStudentRole <Nutzname>. Bei falschen Rollen bitte an die Administratoren wenden.";
+    private final String longDesc = shortDesc + "Nutzung: !loadStudentRole <Nutzname>. Bei falschen Rollen bitte an die Administratoren wenden. Die Rolle kann nur von Studenten verwendet werden";
+    private final String privilegedRole="Studi";
 
     private final Hashtable<String, String> env = new Hashtable<>();
     private String[] returnedAtts;
@@ -39,6 +43,8 @@ public class LoadStudentRolesCommand implements ICommand {
         searchBase = config.config.get("LdapSearchBase");
     }
 
+    //TODO: Remove all old university roles before adding the new ones
+    //TODO: allow adding of roles in a private channel
     public String run(String args, MessageReceivedEvent event){
         HashMap<String,String> results = new HashMap<>();
         if(!event.isFromGuild()){
@@ -47,8 +53,8 @@ public class LoadStudentRolesCommand implements ICommand {
         Guild guild = event.getGuild();
         Member member = event.getMember();
 
-        if(member.getRoles().stream().filter(role -> role.getName().equalsIgnoreCase("Studi")).count() <1){
-            return "Um diesen Befehl nutzen zu können, musst du die Rolle \"Student\" haben.";
+        if(member.getRoles().stream().filter(role -> role.getName().equalsIgnoreCase(privilegedRole)).count() <1){
+            return "Um diesen Befehl nutzen zu können, musst du die Rolle \""+ privilegedRole+"\" haben.";
         }
         //validate Input
         if(!args.matches("^[a-z]+[0-9]{5}$")){
@@ -76,8 +82,6 @@ public class LoadStudentRolesCommand implements ICommand {
             System.out.println("Problem occurs during context initialization !");
             e.printStackTrace();
         }
-        //TODO: allow adding of roles in a private channel
-
 
         switch (results.get("employeetype").split(";")[0]){
             case "ST@B-IN":
@@ -90,6 +94,14 @@ public class LoadStudentRolesCommand implements ICommand {
                 addRole(member, guild, "WIN");
                 break;
         }
+        int terms = getNumberOfTerms(results.get("orclactivestartdate"));
+        if(terms < 8){
+            addRole(member, guild, terms+". Semester");
+        } else {
+            addRole(member, guild, "Studiert schon zu lange");
+        }
+
+
         return "Rollen hinzugefügt. Bitte überprüfe mit Klick auf den Namen, ob die Rollen stimmen.";
     }
 
@@ -102,6 +114,17 @@ public class LoadStudentRolesCommand implements ICommand {
             System.out.println("Did not find the right amount of roles!");
             return false;
         }
+    }
+
+    private int getNumberOfTerms(String ldapDate){
+        int year = Integer.parseInt(ldapDate.substring(0,4));
+        int month = Integer.parseInt(ldapDate.substring(4,6));
+        int day = Integer.parseInt(ldapDate.substring(6,8));
+        LocalDate date = LocalDate.of(year, month, day);
+        LocalDate now = LocalDate.now();
+        long months = Period.between(date, now).toTotalMonths();
+        return (int) (months/6)+1;
+
 
     }
 }

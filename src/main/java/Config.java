@@ -12,7 +12,6 @@ public class Config {
             Scanner myReader = new Scanner(myObj);
             while (myReader.hasNextLine()) {
                 String entry = myReader.nextLine();
-                System.out.println(entry);
                 String key = entry.substring(0,entry.indexOf(':'));
                 String value = entry.substring(entry.indexOf(':')+1);
                 config.put(key,value);
