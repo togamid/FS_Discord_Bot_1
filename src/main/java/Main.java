@@ -7,7 +7,8 @@ import java.util.HashMap;
 
 public class Main {
     public static JDA jda;
-    public static HashMap<String, ICommand> commands;
+    public static HashMap<String, ICommand> commands = new HashMap<>();
+    private static final ICommand[] commandArray = {new GetRoleCommand(), new HelpCommand(), new AddVoiceChannelCommand()/*, new LoadStudentRolesCommand()*/};
 
     public static void main( String[] args) throws LoginException, InterruptedException {
         Config config = new Config();
@@ -17,11 +18,9 @@ public class Main {
                 .build();
         jda.awaitReady();
 
-        commands = new HashMap<>();
-        GetRoleCommand roleCommand = new GetRoleCommand();
-        roleCommand.init(config);
-        commands.put(roleCommand.getCommand(), roleCommand);
-        commands.put("!help", new HelpCommand());
-        commands.put( new AddVoiceChannelCommand().getCommand(), new AddVoiceChannelCommand());
+        for (ICommand command : commandArray) {
+            command.init(config);
+            commands.put(command.getCommand(), command);
+        }
     }
 }

@@ -11,10 +11,11 @@ public class Config {
             File myObj = new File(path);
             Scanner myReader = new Scanner(myObj);
             while (myReader.hasNextLine()) {
-                String data = myReader.nextLine();
-                System.out.println(data);
-                String[] entry = data.split(":");
-                config.put(entry[0], entry[1]);
+                String entry = myReader.nextLine();
+                System.out.println(entry);
+                String key = entry.substring(0,entry.indexOf(':'));
+                String value = entry.substring(entry.indexOf(':')+1);
+                config.put(key,value);
             }
             myReader.close();
         } catch (FileNotFoundException e) {

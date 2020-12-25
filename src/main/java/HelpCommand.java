@@ -54,4 +54,8 @@ public class HelpCommand implements ICommand{
     public String getCommand() {
         return command;
     }
+
+    @Override
+    public void init(Config config) {
+    }
 }

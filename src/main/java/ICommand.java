@@ -5,4 +5,5 @@ public interface ICommand {
     String getShortDesc();
     String getLongDesc();
     String getCommand();
+    void init(Config config);
 }

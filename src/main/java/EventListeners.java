@@ -1,9 +1,7 @@
-import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.VoiceChannel;
-import net.dv8tion.jda.api.events.DisconnectEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import org.jetbrains.annotations.NotNull;
 
 
 public class EventListeners extends ListenerAdapter {
@@ -29,7 +27,7 @@ public class EventListeners extends ListenerAdapter {
             }
         }
 
-        if(!event.getAuthor().isBot() && event.getChannel().getName().equals("bot-commands")){
+        if(!event.getAuthor().isBot() && (event.getChannel().getName().equals("bot-commands") || event.isFromType(ChannelType.PRIVATE))){
             String command;
             String args;
             int posSpace = msgContent.indexOf(' ');

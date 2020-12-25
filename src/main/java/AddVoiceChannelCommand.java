@@ -11,6 +11,11 @@ public class AddVoiceChannelCommand implements ICommand{
     String categoryName = "voice-channel";
 
     @Override
+    public void init(Config config) {
+
+    }
+
+    @Override
     public String run(String args, MessageReceivedEvent event) {
         if(!event.isFromGuild()){
             return "Dieser Befehl kann leider nur auf Servern genutzt werden";
@@ -39,4 +44,6 @@ public class AddVoiceChannelCommand implements ICommand{
     public String getCommand() {
         return command;
     }
+
+
 }
