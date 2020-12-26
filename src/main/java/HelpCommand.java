@@ -1,5 +1,4 @@
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-
 import java.util.Collection;
 
 public class HelpCommand implements ICommand{
@@ -29,8 +28,8 @@ public class HelpCommand implements ICommand{
         else {
             ICommand currCommand = Main.commands.get("!" + args);
             if(currCommand != null) {
-                StringBuilder builder = new StringBuilder(currCommand.getCommand());
-                builder.append(": ");
+                StringBuilder builder = new StringBuilder("**"+currCommand.getCommand());
+                builder.append("**: ");
                 builder.append(currCommand.getLongDesc());
                 return builder.toString();
             }

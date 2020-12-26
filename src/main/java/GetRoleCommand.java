@@ -37,12 +37,11 @@ public class GetRoleCommand implements ICommand {
     }
 
     public String run(String roleName, MessageReceivedEvent event){
-        if(!event.isFromGuild()){
-            return "Dieser Befehl kann leider nur auf Servern genutzt werden";
+        Guild guild = Utility.getGuild(event, Main.serverName);
+        if(guild == null){
+            return "Das Laden des betreffenden Servers ist fehlgeschlagen.";
         }
-
-        Guild guild = event.getGuild();
-        Member member = event.getMember();
+        Member member = guild.getMember(event.getAuthor());
 
         if(roleName.isEmpty() || roleName.equals("!role")){
             return "Syntax: !role <Rollenname>. Eine Liste der Rollen findet sich in #organisation";

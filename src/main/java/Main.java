@@ -9,6 +9,7 @@ public class Main {
     public static JDA jda;
     public static HashMap<String, ICommand> commands = new HashMap<>();
     private static final ICommand[] commandArray = {new GetRoleCommand(), new HelpCommand(), new AddVoiceChannelCommand(), new LoadStudentRolesCommand()};
+    public static final String serverName = "Fachschaft Informatik";
 
     public static void main( String[] args) throws LoginException, InterruptedException {
         Config config = new Config();

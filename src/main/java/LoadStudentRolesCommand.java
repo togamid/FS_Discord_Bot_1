@@ -13,8 +13,8 @@ import java.util.*;
 
 public class LoadStudentRolesCommand implements ICommand {
     //Config parameters
-    private static final String command = "!loadStudentRoles";
-    private final String shortDesc = "Lädt die Studentenrollen für den Nutzer. ";
+    private static final String command = "!updateStudentRoles";
+    private final String shortDesc = "Updated die Studentenrollen für den Nutzer. Wenn noch keine vorhanden sind, werden sie neu hinzugefügt. ";
     private final String longDesc = shortDesc + "Nutzung: !loadStudentRole <Nutzname>. Bei falschen Rollen bitte an die Administratoren wenden. Die Rolle kann nur von Studenten verwendet werden";
     private final String privilegedRole="Studi";
 
@@ -43,15 +43,13 @@ public class LoadStudentRolesCommand implements ICommand {
         searchBase = config.config.get("LdapSearchBase");
     }
 
-    //TODO: Remove all old university roles before adding the new ones
-    //TODO: allow adding of roles in a private channel
     public String run(String args, MessageReceivedEvent event){
         HashMap<String,String> results = new HashMap<>();
-        if(!event.isFromGuild()){
-            return "Dieser command darf nur in Guilds verwendet werden!";
+        Guild guild = Utility.getGuild(event, Main.serverName);
+        if(guild == null){
+            return "Das Laden des betreffenden Servers ist fehlgeschlagen.";
         }
-        Guild guild = event.getGuild();
-        Member member = event.getMember();
+        Member member = guild.getMember(event.getAuthor());
 
         if(member.getRoles().stream().filter(role -> role.getName().equalsIgnoreCase(privilegedRole)).count() <1){
             return "Um diesen Befehl nutzen zu können, musst du die Rolle \""+ privilegedRole+"\" haben.";
@@ -82,6 +80,9 @@ public class LoadStudentRolesCommand implements ICommand {
             System.out.println("Problem occurs during context initialization !");
             e.printStackTrace();
         }
+        //Remove old roles. Master and "Studiert schon zu lange" are missing, as they probably don't change or are used for other purposes
+        //TODO: there might be a race condition with readding these roles
+        member.getRoles().stream().filter(role -> role.getName().matches("[1-9]+. Semester") || role.getName().matches("[MW]?IN")).forEach(role -> guild.removeRoleFromMember(member, role).queue());
 
         switch (results.get("employeetype").split(";")[0]){
             case "ST@B-IN":
