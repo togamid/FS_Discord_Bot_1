@@ -49,7 +49,14 @@ public class LoadStudentRolesCommand implements ICommand {
         if(guild == null){
             return "Das Laden des betreffenden Servers ist fehlgeschlagen.";
         }
-        Member member = guild.getMember(event.getAuthor());
+        //TODO: figure out, why member = guild.getMember(event.getAuthor()); does not work all the time
+        Member member;
+        if(event.isFromGuild()){
+            member = event.getMember();
+        } else{
+            member = guild.getMember(event.getAuthor());
+        }
+
 
         if(member.getRoles().stream().filter(role -> role.getName().equalsIgnoreCase(privilegedRole)).count() <1){
             return "Um diesen Befehl nutzen zu können, musst du die Rolle \""+ privilegedRole+"\" haben.";
