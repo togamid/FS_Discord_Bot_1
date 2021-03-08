@@ -49,12 +49,11 @@ public class LoadStudentRolesCommand implements ICommand {
         if(guild == null){
             return "Das Laden des betreffenden Servers ist fehlgeschlagen.";
         }
-        //TODO: figure out, why member = guild.getMember(event.getAuthor()); does not work all the time
         Member member;
         if(event.isFromGuild()){
             member = event.getMember();
         } else{
-            member = guild.getMember(event.getAuthor());
+            member = guild.retrieveMember(event.getAuthor()).complete();
         }
 
 

@@ -1,6 +1,7 @@
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.entities.Guild;
 
 import javax.security.auth.login.LoginException;
 import java.util.HashMap;
@@ -10,6 +11,7 @@ public class Main {
     public static HashMap<String, ICommand> commands = new HashMap<>();
     private static final ICommand[] commandArray = {new GetRoleCommand(), new AddVoiceChannelCommand(), new LoadStudentRolesCommand(), new HelpCommand()};
     public static final String serverName = "Fachschaft Informatik";
+    public static Guild guild;
 
     public static void main( String[] args) throws LoginException, InterruptedException {
         Config config = new Config();
@@ -18,6 +20,7 @@ public class Main {
                 .addEventListeners(new EventListeners())
                 .build();
         jda.awaitReady();
+
 
         for (ICommand command : commandArray) {
             command.init(config);

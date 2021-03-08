@@ -1,5 +1,6 @@
 import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.VoiceChannel;
+import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
@@ -8,6 +9,9 @@ public class EventListeners extends ListenerAdapter {
 
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
+        if(Main.guild == null && event.isFromGuild()){
+            Main.guild = event.getGuild();
+        }
         String msgContent = event.getMessage().getContentRaw();
         String mention;
         if(event.getMember() != null){
@@ -15,16 +19,6 @@ public class EventListeners extends ListenerAdapter {
 
         } else {
             mention = event.getAuthor().getAsMention();
-        }
-
-        //TODO This is only temporary and should be changed
-        if(event.isFromGuild() && !event.getAuthor().isBot()){
-           VoiceChannel[] channels = event.getGuild().getVoiceChannels().toArray(new VoiceChannel[0]);
-            for (VoiceChannel channel : channels ){
-                if(channel.getName().startsWith("[TEMP]") && channel.getMembers().size() == 0){
-                   event.getGuild().getGuildChannelById(channel.getId()).delete().queue();
-                }
-            }
         }
 
         if(!event.getAuthor().isBot() && (event.getChannel().getName().equals("bot-commands") || event.isFromType(ChannelType.PRIVATE))){
@@ -46,6 +40,15 @@ public class EventListeners extends ListenerAdapter {
                 event.getChannel().sendMessage(mention +" "+  commandObj.run(args, event)).queue();
             }
          }
+    }
+
+    @Override
+    public void onGuildVoiceLeave(GuildVoiceLeaveEvent event){
+        for(VoiceChannel channel : event.getGuild().getVoiceChannels()){
+            if(AddVoiceChannelCommand.checkChannel(channel)){
+                event.getGuild().getGuildChannelById(channel.getId()).delete().queue();
+            }
+        }
     }
 
 

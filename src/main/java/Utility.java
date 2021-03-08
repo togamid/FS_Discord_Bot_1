@@ -9,7 +9,10 @@ public class Utility {
            Object[] guilds = event.getAuthor().getMutualGuilds().stream().filter(guild -> guild.getName().equalsIgnoreCase(servername)).toArray();
            if(guilds.length == 1){
                return (Guild) guilds[0];
-           } else{
+           } else if(Main.guild != null) {
+               return Main.guild;
+           }
+           else{
                System.out.println("Error: couldn't find guild!");
                return null;
            }
