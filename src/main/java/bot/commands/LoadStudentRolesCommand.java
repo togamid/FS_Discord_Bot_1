@@ -21,7 +21,7 @@ public class LoadStudentRolesCommand implements ICommand {
     private static final String command = "updateStudentRoles";
     private final String shortDesc = "Updated die Studentenrollen für den Nutzer. Wenn noch keine vorhanden sind, werden sie neu hinzugefügt. ";
     private final String longDesc = shortDesc + "Nutzung: !loadStudentRole <Nutzname>. Bei falschen Rollen bitte an die Administratoren wenden. Die Rolle kann nur von Studenten verwendet werden";
-    private final String privilegedRole="Studi";
+    private String privilegedRole = "Studi";
 
     private final Hashtable<String, String> env = new Hashtable<>();
     private String[] returnedAtts;
@@ -45,6 +45,7 @@ public class LoadStudentRolesCommand implements ICommand {
         env.put(Context.SECURITY_AUTHENTICATION, config.get("LdapSecurityAuthentication"));
         returnedAtts = config.get("LdapReturnedAttributes").split(",");
         searchBase = config.get("LdapSearchBase");
+        privilegedRole = config.get("LoadStudentRolesPrivilegedRole") != null?config.get("LoadStudentRolesPrivilegedRole"): privilegedRole;
     }
 
     public LoadStudentRolesCommand(){}

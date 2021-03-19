@@ -18,10 +18,11 @@ public class AddVoiceChannelCommand implements ICommand {
     private final String longDesc = shortDesc + " Nutzen mit !tmpvoice <Kanalname>. Der Kanal wird nach einiger Zeit wieder gelöscht.";
     private final String command = "tmpvoice";
     static final int protectedTimeMinutes = 2;
-    static final String categoryName = "voice-channel";
+    private  String categoryName = "voice-channel";
 
     @Override
     public void init(Config config) {
+        categoryName = config.get("TmpVoiceCategory") != null ? config.get("TmpVoiceCategory") : categoryName;
     }
 
     public AddVoiceChannelCommand(){ }

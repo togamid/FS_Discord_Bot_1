@@ -7,9 +7,9 @@ import java.util.Collection;
 
 public class HelpCommand implements ICommand {
 
-    String longDesc = "Zeigt diese Nachricht. !help <command> für weitere Informationen";
-    String shortDesc = "Zeigt diese Nachricht. !help <command> für weitere Informationen";
-    String command = "help";
+    private final String longDesc = "Zeigt diese Nachricht. !help <command> für weitere Informationen";
+    private final String shortDesc = "Zeigt diese Nachricht. !help <command> für weitere Informationen";
+    private final String command = "help";
 
 
     @Override
