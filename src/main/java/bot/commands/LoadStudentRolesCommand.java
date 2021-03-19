@@ -18,7 +18,7 @@ import java.util.*;
 
 public class LoadStudentRolesCommand implements ICommand {
     //Config parameters
-    private static final String command = "!updateStudentRoles";
+    private static final String command = "updateStudentRoles";
     private final String shortDesc = "Updated die Studentenrollen für den Nutzer. Wenn noch keine vorhanden sind, werden sie neu hinzugefügt. ";
     private final String longDesc = shortDesc + "Nutzung: !loadStudentRole <Nutzname>. Bei falschen Rollen bitte an die Administratoren wenden. Die Rolle kann nur von Studenten verwendet werden";
     private final String privilegedRole="Studi";

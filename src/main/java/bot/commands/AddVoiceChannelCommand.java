@@ -16,7 +16,7 @@ public class AddVoiceChannelCommand implements ICommand {
 
     private final String shortDesc = "Fügt einen neuen temporären Voicechannel hinzu.";
     private final String longDesc = shortDesc + " Nutzen mit !tmpvoice <Kanalname>. Der Kanal wird nach einiger Zeit wieder gelöscht.";
-    private final String command = "!tmpvoice";
+    private final String command = "tmpvoice";
     static final int protectedTimeMinutes = 2;
     static final String categoryName = "voice-channel";
 

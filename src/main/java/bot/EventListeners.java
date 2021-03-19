@@ -25,16 +25,18 @@ public class EventListeners extends ListenerAdapter {
             mention = event.getAuthor().getAsMention();
         }
 
-        if(!event.getAuthor().isBot() && (event.getChannel().getName().equals("bot-commands") || event.isFromType(ChannelType.PRIVATE))){
+        if(!event.getAuthor().isBot()
+                && (event.getChannel().getName().equals("bot-commands") || event.isFromType(ChannelType.PRIVATE))
+                && msgContent.startsWith(Bot.getSignif())){
             String command;
             String args;
             int posSpace = msgContent.indexOf(' ');
             if(posSpace != -1 && posSpace+1<msgContent.length()) {
-                command = msgContent.substring(0, posSpace);
+                command = msgContent.substring(Bot.getSignif().length(), posSpace);
                 args = msgContent.substring(posSpace+1);
             }
             else {
-                command = msgContent;
+                command = msgContent.substring(Bot.getSignif().length());
                 args="";
             }
 

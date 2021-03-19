@@ -9,7 +9,7 @@ public class HelpCommand implements ICommand {
 
     String longDesc = "Zeigt diese Nachricht. !help <command> für weitere Informationen";
     String shortDesc = "Zeigt diese Nachricht. !help <command> für weitere Informationen";
-    String command = "!help";
+    String command = "help";
 
 
     @Override
@@ -22,6 +22,7 @@ public class HelpCommand implements ICommand {
             for (int i = 0; i< commands.length; i++){
                 ICommand currCommand = commands[i];
                 builder.append("**");
+                builder.append(Bot.getSignif());
                 builder.append(currCommand.getCommand());
                 builder.append("**: ");
                 builder.append(currCommand.getShortDesc());
@@ -30,9 +31,9 @@ public class HelpCommand implements ICommand {
             return builder.toString();
         }
         else {
-            ICommand currCommand = Bot.commands.get("!" + args);
+            ICommand currCommand = Bot.commands.get(args);
             if(currCommand != null) {
-                return "**" + currCommand.getCommand() + "**: " + currCommand.getLongDesc();
+                return "**" + Bot.getSignif() + currCommand.getCommand() + "**: " + currCommand.getLongDesc();
             }
             else {
                 return "Command nicht gefunden. Ohne das \""+ Bot.getSignif() +"\" eingeben";

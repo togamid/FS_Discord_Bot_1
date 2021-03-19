@@ -14,7 +14,7 @@ import java.util.List;
 
 public class GetRoleCommand implements ICommand {
 
-    private static final String command = "!role";
+    private static final String command = "role";
     private final String shortDesc = "Toggelt die entsprechende Gaming Rolle. ";
     private final String longDesc = shortDesc + "Nutzung: !role <Rollenname>. Zum Entfernen den gleichen Command nochmal verwenden.";
     String[] allowedRoles = {};
