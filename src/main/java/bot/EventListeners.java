@@ -1,22 +1,26 @@
+package bot;
+
+import bot.commands.AddVoiceChannelCommand;
+import bot.commands.ICommand;
 import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import org.jetbrains.annotations.NotNull;
 
 
 public class EventListeners extends ListenerAdapter {
 
     @Override
-    public void onMessageReceived(MessageReceivedEvent event) {
-        if(Main.guild == null && event.isFromGuild()){
-            Main.guild = event.getGuild();
+    public void onMessageReceived(@NotNull MessageReceivedEvent event) {
+        if(Bot.guild == null && event.isFromGuild()){
+            Bot.guild = event.getGuild();
         }
         String msgContent = event.getMessage().getContentRaw();
         String mention;
         if(event.getMember() != null){
            mention = event.getMember().getAsMention();
-
         } else {
             mention = event.getAuthor().getAsMention();
         }
@@ -34,7 +38,7 @@ public class EventListeners extends ListenerAdapter {
                 args="";
             }
 
-            ICommand commandObj = Main.commands.get(command);
+            ICommand commandObj = Bot.commands.get(command);
 
             if(commandObj != null){
                 event.getChannel().sendMessage(mention +" "+  commandObj.run(args, event)).queue();

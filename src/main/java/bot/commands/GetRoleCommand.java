@@ -1,3 +1,8 @@
+package bot.commands;
+
+import bot.Bot;
+import bot.Config;
+import bot.Utility;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
@@ -13,6 +18,7 @@ public class GetRoleCommand implements ICommand {
     private final String shortDesc = "Toggelt die entsprechende Gaming Rolle. ";
     private final String longDesc = shortDesc + "Nutzung: !role <Rollenname>. Zum Entfernen den gleichen Command nochmal verwenden.";
     String[] allowedRoles = {};
+    private String allowedRolesMessage;
 
     public String getShortDesc(){
         return shortDesc;
@@ -28,23 +34,30 @@ public class GetRoleCommand implements ICommand {
 
 
     public void init(Config config){
-        String[] rolesRaw = config.config.get("SelfAssignableRoles").split(",");
-        for(int i = 0; i< rolesRaw.length; i++){
-            rolesRaw[i] = rolesRaw[i].trim().toLowerCase();
+        allowedRoles = config.getSelfAssignableRoles();
+        StringBuilder builder = new StringBuilder(" Verfügbare Rollen: ");
+        for(String role : allowedRoles){
+            builder.append(role);
+            builder.append(", ");
         }
+        allowedRolesMessage = builder.toString();
+    }
 
-        allowedRoles = rolesRaw;
+    public GetRoleCommand(){}
+    public GetRoleCommand(Config config){
+        init(config);
     }
 
     public String run(String roleName, MessageReceivedEvent event){
-        Guild guild = Utility.getGuild(event, Main.serverName);
+        Guild guild = Utility.getGuild(event, Bot.serverName);
         if(guild == null){
             return "Das Laden des betreffenden Servers ist fehlgeschlagen.";
         }
         Member member = guild.getMember(event.getAuthor());
 
         if(roleName.isEmpty() || roleName.equals("!role")){
-            return "Syntax: !role <Rollenname>. Eine Liste der Rollen findet sich in #organisation";
+
+            return "Syntax: !role <Rollenname>." + allowedRolesMessage;
         }
 
         List<Role> roles = guild.getRolesByName( roleName, true);
@@ -56,7 +69,7 @@ public class GetRoleCommand implements ICommand {
 
 
         if(Arrays.stream(allowedRoles).noneMatch((allowedRole) -> roleName.equalsIgnoreCase(allowedRole))) {
-            return "Du darfst diese Rolle nicht ändern. Bitte frage einen Administrator.";
+            return "Du darfst diese Rolle nicht ändern. Bitte frage einen Administrator." + roles;
         }
 
         try {

@@ -1,3 +1,8 @@
+package bot.commands;
+
+import bot.Bot;
+import bot.Config;
+import bot.Utility;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
@@ -21,7 +26,6 @@ public class LoadStudentRolesCommand implements ICommand {
     private final Hashtable<String, String> env = new Hashtable<>();
     private String[] returnedAtts;
     private String searchBase;
-    private SearchResult searchResult;
 
     public String getShortDesc(){
         return shortDesc;
@@ -36,16 +40,21 @@ public class LoadStudentRolesCommand implements ICommand {
     }
 
     public void init(Config config){
-        env.put(Context.PROVIDER_URL, config.config.get("LdapProviderUrl"));
+        env.put(Context.PROVIDER_URL, config.get("LdapProviderUrl"));
         env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
-        env.put(Context.SECURITY_AUTHENTICATION, config.config.get("LdapSecurityAuthentication"));
-        returnedAtts = config.config.get("LdapReturnedAttributes").split(",");
-        searchBase = config.config.get("LdapSearchBase");
+        env.put(Context.SECURITY_AUTHENTICATION, config.get("LdapSecurityAuthentication"));
+        returnedAtts = config.get("LdapReturnedAttributes").split(",");
+        searchBase = config.get("LdapSearchBase");
+    }
+
+    public LoadStudentRolesCommand(){}
+    public LoadStudentRolesCommand(Config config){
+        init(config);
     }
 
     public String run(String args, MessageReceivedEvent event){
         HashMap<String,String> results = new HashMap<>();
-        Guild guild = Utility.getGuild(event, Main.serverName);
+        Guild guild = Utility.getGuild(event, Bot.serverName);
         if(guild == null){
             return "Das Laden des betreffenden Servers ist fehlgeschlagen.";
         }
@@ -58,6 +67,10 @@ public class LoadStudentRolesCommand implements ICommand {
 
 
         if(member.getRoles().stream().filter(role -> role.getName().equalsIgnoreCase(privilegedRole)).count() <1){
+            //TODO: this should be its own command and is only temporary
+            event.getAuthor().openPrivateChannel().queue(channel -> channel.sendMessage("Wenn du die Rolle \"" + privilegedRole+ "\" haben " +
+                    "willst, schreib bitte eine Nachricht mit deiner Hochschul-Email an gaisserto80670@th-nuernberg.de mit dem Betreff \"Discord Authentifizierung\" und deinem Discord-Namen. " +
+                    "Du wirst dann so bald wie möglich freigeschalten.").queue());
             return "Um diesen Befehl nutzen zu können, musst du die Rolle \""+ privilegedRole+"\" haben.";
         }
         //validate Input
@@ -71,6 +84,7 @@ public class LoadStudentRolesCommand implements ICommand {
             searchCtls.setReturningAttributes(returnedAtts);
             searchCtls.setSearchScope(SearchControls.SUBTREE_SCOPE);
             String searchFilter = "uid="+args;
+            SearchResult searchResult;
             NamingEnumeration<SearchResult> answer = ldapContext.search(searchBase, searchFilter, searchCtls);
             if(answer.hasMoreElements()){
                 searchResult = answer.next();
@@ -103,6 +117,8 @@ public class LoadStudentRolesCommand implements ICommand {
             case "ST@M-IN":
                 addRole(member, guild, "Master");
                 break;
+            default:
+                addRole(member, guild, "Gast");
 
         }
         int terms = getNumberOfTerms(results.get("orclactivestartdate"));

@@ -1,3 +1,6 @@
+package bot.commands;
+
+import bot.Config;
 import net.dv8tion.jda.api.entities.Category;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.VoiceChannel;
@@ -7,7 +10,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 
-public class AddVoiceChannelCommand implements ICommand{
+public class AddVoiceChannelCommand implements ICommand {
     private static final HashMap<String, LocalDateTime> voicechannelCreationTime = new HashMap<>();
 
 
@@ -19,7 +22,11 @@ public class AddVoiceChannelCommand implements ICommand{
 
     @Override
     public void init(Config config) {
+    }
 
+    public AddVoiceChannelCommand(){ }
+    public AddVoiceChannelCommand(Config config){
+        init(config);
     }
 
     @Override
