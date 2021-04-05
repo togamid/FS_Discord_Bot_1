@@ -12,20 +12,20 @@ public class Bot {
     public static JDA jda;
     public static HashMap<String, ICommand> commands = new HashMap<>();
     public static final Config config = new Config("config.txt");
+    private static final String botSignifier = config.get("BotSignifier");
     private static final ICommand[] commandArray = {new GetRoleCommand(config),
             new AddVoiceChannelCommand(config),
             new LoadStudentRolesCommand(config),
             new HelpCommand()};
     public static final String serverName = "Fachschaft Informatik";
     public static Guild guild;
-    private static String botSignifier;
+
 
     public void run() throws LoginException, InterruptedException {
         jda = JDABuilder.createDefault(config.get("Token"))
                 .addEventListeners(new EventListeners())
                 .build();
         jda.awaitReady();
-        botSignifier=config.get("BotSignifier");
 
         for (ICommand command : commandArray) {
             commands.put(command.getCommand(), command);
