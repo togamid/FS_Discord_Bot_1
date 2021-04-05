@@ -18,9 +18,9 @@ import java.util.*;
 
 public class LoadStudentRolesCommand implements ICommand {
     //Config parameters
-    private static final String command = "updateStudentRoles";
+    private static final String command = "studentRoles";
     private final String shortDesc = "Updated die Studentenrollen für den Nutzer. Wenn noch keine vorhanden sind, werden sie neu hinzugefügt. ";
-    private final String longDesc = shortDesc + "Nutzung: !loadStudentRole <Nutzname>. Bei falschen Rollen bitte an die Administratoren wenden. Die Rolle kann nur von Studenten verwendet werden";
+    private final String longDesc = shortDesc + "Nutzung: " + Bot.getSignif() +command +" mustermenschma12345. Bei falschen Rollen bitte an die Administratoren wenden. Der Command kann nur von Studenten verwendet werden";
     private String privilegedRole = "Studi";
 
     private final Hashtable<String, String> env = new Hashtable<>();
@@ -76,7 +76,7 @@ public class LoadStudentRolesCommand implements ICommand {
         }
         //validate Input
         if(!args.matches("^[a-z]+[0-9]{5}$")){
-            return "Ungültiger Nutzername!";
+            return "Ungültiger Nutzername! Bitte nutze den Nutzername nache dem Format mustermenschma12345";
         }
         try {
             // Opening the connection

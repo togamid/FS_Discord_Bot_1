@@ -43,7 +43,9 @@ public class EventListeners extends ListenerAdapter {
             ICommand commandObj = Bot.commands.get(command);
 
             if(commandObj != null){
-                event.getChannel().sendMessage(mention +" "+  commandObj.run(args, event)).queue();
+                String response = commandObj.run(args, event);
+                response = response.replace("@", "(at)");
+                event.getChannel().sendMessage(mention +" "+  response).queue();
             }
          }
     }
