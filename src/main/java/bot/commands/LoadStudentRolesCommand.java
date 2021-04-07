@@ -117,6 +117,15 @@ public class LoadStudentRolesCommand implements ICommand {
                 break;
             case "ST@M-IN":
                 addRole(member, guild, "Master");
+                addRole(member, guild, "IN");
+                break;
+            case "ST@M-WIN":
+                addRole(member, guild, "Master");
+                addRole(member, guild, "WIN");
+                break;
+            case "ST@M-MIN":
+                addRole(member, guild, "Master");
+                addRole(member, guild, "MIN");
                 break;
             default:
                 addRole(member, guild, "Gast");
