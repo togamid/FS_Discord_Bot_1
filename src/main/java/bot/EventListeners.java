@@ -2,9 +2,9 @@ package bot;
 
 import bot.commands.AddVoiceChannelCommand;
 import bot.commands.ICommand;
-import net.dv8tion.jda.api.entities.ChannelType;
-import net.dv8tion.jda.api.entities.VoiceChannel;
-import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
+import net.dv8tion.jda.api.entities.channel.ChannelType;
+import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
+import net.dv8tion.jda.api.events.guild.voice.GuildVoiceUpdateEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
@@ -49,9 +49,9 @@ public class EventListeners extends ListenerAdapter {
             }
          }
     }
-
+    // TODO: eigentlich war das nur beim verlassen (GuildVoiceLeaveEvent), aber das scheint es irgendiwe nicht mehr zu geben
     @Override
-    public void onGuildVoiceLeave(GuildVoiceLeaveEvent event){
+    public void onGuildVoiceUpdate(GuildVoiceUpdateEvent event){
         for(VoiceChannel channel : event.getGuild().getVoiceChannels()){
             if(AddVoiceChannelCommand.checkChannel(channel)){
                 event.getGuild().getGuildChannelById(channel.getId()).delete().queue();

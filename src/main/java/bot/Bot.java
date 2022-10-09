@@ -4,6 +4,7 @@ import bot.commands.*;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.requests.GatewayIntent;
 
 import javax.security.auth.login.LoginException;
 import java.util.HashMap;
@@ -23,6 +24,7 @@ public class Bot {
 
     public void run() throws LoginException, InterruptedException {
         jda = JDABuilder.createDefault(config.get("Token"))
+                .enableIntents(GatewayIntent.GUILD_MESSAGES, GatewayIntent.MESSAGE_CONTENT)
                 .addEventListeners(new EventListeners())
                 .build();
         jda.awaitReady();

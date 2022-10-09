@@ -16,6 +16,7 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.*;
 
+// TODO: make LDAP Connection async
 public class LoadStudentRolesCommand implements ICommand {
     //Config parameters
     private static final String command = "studentRoles";
@@ -48,7 +49,6 @@ public class LoadStudentRolesCommand implements ICommand {
         privilegedRole = config.get("LoadStudentRolesPrivilegedRole") != null?config.get("LoadStudentRolesPrivilegedRole"): privilegedRole;
     }
 
-    public LoadStudentRolesCommand(){}
     public LoadStudentRolesCommand(Config config){
         init(config);
     }
@@ -69,7 +69,7 @@ public class LoadStudentRolesCommand implements ICommand {
 
         if(member.getRoles().stream().filter(role -> role.getName().equalsIgnoreCase(privilegedRole)).count() <1){
             //TODO: this should be its own command and is only temporary
-            event.getAuthor().openPrivateChannel().queue(channel -> channel.sendMessage("Wenn du die Rolle \"" + privilegedRole+ "\" haben " +
+            member.getUser().openPrivateChannel().queue(channel -> channel.sendMessage("Wenn du die Rolle \"" + privilegedRole+ "\" haben " +
                     "willst, schreib bitte eine Nachricht mit deiner Hochschul-Email an gaisserto80670@th-nuernberg.de mit dem Betreff \"Discord Authentifizierung\" und deinem Discord-Namen. " +
                     "Du wirst dann so bald wie möglich freigeschalten.").queue());
             return "Um diesen Befehl nutzen zu können, musst du die Rolle \""+ privilegedRole+"\" haben.";
@@ -161,7 +161,5 @@ public class LoadStudentRolesCommand implements ICommand {
         LocalDate now = LocalDate.now();
         long months = Period.between(date, now).toTotalMonths();
         return (int) (months/6)+1;
-
-
     }
 }

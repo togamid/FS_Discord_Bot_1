@@ -1,14 +1,15 @@
 package bot.commands;
 
 import bot.Config;
-import net.dv8tion.jda.api.entities.Category;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.VoiceChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.Category;
+import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 
 public class AddVoiceChannelCommand implements ICommand {
     private static final HashMap<String, LocalDateTime> voicechannelCreationTime = new HashMap<>();
@@ -29,21 +30,37 @@ public class AddVoiceChannelCommand implements ICommand {
     public AddVoiceChannelCommand(Config config){
         init(config);
     }
+    public AddVoiceChannelCommand(String categoryName){
+        this.categoryName = categoryName;
+    }
 
     @Override
     public String run(String args, MessageReceivedEvent event) {
-        if(!event.isFromGuild()){
+        return addVoiceChannel(args, event.isFromGuild(), event.getGuild());
+    }
+
+    public String addVoiceChannel(String args, boolean isFromGuild, Guild guild) {
+        if(!isFromGuild) {
             return "Dieser Befehl kann leider nur auf Servern genutzt werden";
         }
+        if(args == null || args.equals("")) {
+            return this.longDesc;
+        }
 
-        if(args.equals(""))
-            return longDesc;
+        List<Category> categories = guild.getCategoriesByName(categoryName, true);
+        if(categories.size() < 1){
+            return "There is no category with the configured name " + categoryName + ". Please contact an administrator.";
+        }
 
-        Guild guild = event.getGuild();
-        Category category = guild.getCategoriesByName(categoryName, true).get(0);
-        guild.createVoiceChannel("[TEMP] " + args, category).queue(channel -> voicechannelCreationTime.put(channel.getId(), LocalDateTime.now()));
+        Category category = categories.get(0);
+
+        guild.createVoiceChannel("[TEMP] " + args, category).queue(this::addVoicechannelCreationTime);
 
         return "Kanal \"" + args + "\" erstellt! Bitte gehe schnell in den Kanal, bevor er gelöscht wird";
+    }
+
+    public void addVoicechannelCreationTime(VoiceChannel channel){
+        voicechannelCreationTime.put(channel.getId(), LocalDateTime.now());
     }
 
     @Override
