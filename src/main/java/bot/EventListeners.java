@@ -46,6 +46,7 @@ public class EventListeners extends ListenerAdapter {
                 String response = commandObj.run(args, event);
                 response = response.replace("@", "(at)");
                 event.getChannel().sendMessage(mention +" "+  response).queue();
+                System.out.println("User " + mention + " used command " + command + " with args " + args);
             }
          }
     }
